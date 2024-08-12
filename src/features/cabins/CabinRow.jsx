@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { formatCurrency } from '../../utils/helpers'; 
+import PropTypes from "prop-types";
 
 const TableRow = styled.div`
   display: grid;
@@ -38,3 +40,28 @@ const Discount = styled.div`
   font-weight: 500;
   color: var(--color-green-700);
 `;
+
+export default function CabinRow({cabin}) {
+ const { name , maxCapacity , regular_price , discount , image } = cabin;
+ 
+  return (
+    <TableRow>
+        <Img src={image} />
+        <Cabin>{name}</Cabin>
+        <div>Fits up tp {maxCapacity} guests</div>
+        <Price>{formatCurrency(regular_price)}</Price>
+        <Discount>{formatCurrency(discount)}</Discount>
+        <button>Delete</button>
+    </TableRow>
+  )
+}
+
+CabinRow.propTypes = {
+  cabin: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    maxCapacity: PropTypes.number.isRequired,
+    regular_price: PropTypes.number.isRequired,
+    discount: PropTypes.number.isRequired,
+    image: PropTypes.string.isRequired,
+  }).isRequired,
+};
