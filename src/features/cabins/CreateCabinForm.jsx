@@ -19,7 +19,7 @@ function CreateCabinForm() {
       mutationFn : createCabin,
       onSuccess : () => {
           toast.success('New cabin successfully created');
-          queryClient.invalidateQueries({ queryKey : ["cabins"] });
+          queryClient.invalidateQueries({ queryKey : ["cabin"] });
           reset();
       },
       onError : (err) => toast.error(err.message)
@@ -53,7 +53,7 @@ function CreateCabinForm() {
       <FormRow label="regular_price" error={errors?.regular_price?.message}>
         <Input type="number" id="regular_price" disabled={isCreating} {...register("regular_price" , { required : "This field is required"})}/>
       </FormRow>
-
+      {console.log(getValues().regular_price)}
       <FormRow label="discount" error={errors?.discount?.message}>
         <Input type="number" id="discount" disabled={isCreating} defaultValue={0} {...register("discount" , { 
             required : "This field is required" ,
