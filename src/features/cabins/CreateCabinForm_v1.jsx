@@ -1,25 +1,17 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import PropTypes from "prop-types";
-
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
+import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { createCabin } from "../../services/apiCabins";
 import FormRow from "../../ui/FormRow";
 
-import { createCabin } from "../../services/apiCabins";
-import { useForm } from "react-hook-form";
 
-
-function CreateCabinForm({cabinToEdit}) {
-  const { id : editId , ...editValues } = cabinToEdit;
-  const isEditSession = Boolean(editId);
-
-  const { register , handleSubmit , reset , getValues , formState } = useForm({
-      defaultValues : isEditSession ? editValues : {} 
-  });
+function CreateCabinForm() {
+  const { register , handleSubmit , reset , getValues , formState } = useForm();
   const queryClient = useQueryClient();
   const {errors} = formState;
   
@@ -89,15 +81,3 @@ function CreateCabinForm({cabinToEdit}) {
 }
 
 export default CreateCabinForm;
-
-CreateCabinForm.propTypes = {
-  cabinToEdit: PropTypes.shape({
-    id: PropTypes.number,  // or string depending on the type of id
-    name: PropTypes.string,
-    max_capacity: PropTypes.number,
-    regular_price: PropTypes.number,
-    discount: PropTypes.number,
-    description: PropTypes.string,
-    image: PropTypes.string,  // Assuming the image is a URL or a file name
-  }),
-};
