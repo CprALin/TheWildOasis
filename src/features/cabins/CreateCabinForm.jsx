@@ -9,11 +9,11 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
-import { createCabin } from "../../services/apiCabins";
+import { createEditCabin } from "../../services/apiCabins";
 import { useForm } from "react-hook-form";
 
 
-function CreateCabinForm({cabinToEdit}) {
+function CreateCabinForm({cabinToEdit = {}}) {
   const { id : editId , ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
 
@@ -23,8 +23,8 @@ function CreateCabinForm({cabinToEdit}) {
   const queryClient = useQueryClient();
   const {errors} = formState;
   
-  const {mutate , isLoading : isCreating} = useMutation({
-      mutationFn : createCabin,
+  const {mutate : createCabin, isLoading : isCreating} = useMutation({
+      mutationFn : createEditCabin,
       onSuccess : () => {
           toast.success('New cabin successfully created');
           queryClient.invalidateQueries({ queryKey : ["cabin"] });
@@ -33,8 +33,23 @@ function CreateCabinForm({cabinToEdit}) {
       onError : (err) => toast.error(err.message)
   })
 
+  const {mutate : editCabin , isLoading : isEditing} = useMutation({
+    mutationFn : ({newCabinData , id}) => createEditCabin(newCabinData , id),
+    onSuccess : () => {
+        toast.success('Cabin successfully edited.');
+        queryClient.invalidateQueries({ queryKey : ["cabin"] });
+        reset();
+    },
+    onError : (err) => toast.error(err.message)
+  })
+
+  const isWorking = isCreating || isEditing;
+
   function onSubmit(data) {
-      mutate({...data , image : data.image[0]});
+      const image = typeof data.image === 'string' ? data.image : data.image[0] 
+    
+      if(isEditSession) editCabin({newCabinData : {...data , image} , id : editId});
+      else createCabin({...data , image : image});
   }
 
   function onError() {
@@ -49,7 +64,7 @@ function CreateCabinForm({cabinToEdit}) {
       </FormRow>
 
       <FormRow label="max_capacity" error={errors?.max_capacity?.message}>
-        <Input type="number" id="max_capacity" disabled={isCreating} {...register("max_capacity" , { 
+        <Input type="number" id="max_capacity" disabled={isWorking} {...register("max_capacity" , { 
           required : "This field is required" , 
           min : { 
             value : 1 , 
@@ -59,22 +74,22 @@ function CreateCabinForm({cabinToEdit}) {
       </FormRow>
 
       <FormRow label="regular_price" error={errors?.regular_price?.message}>
-        <Input type="number" id="regular_price" disabled={isCreating} {...register("regular_price" , { required : "This field is required"})}/>
+        <Input type="number" id="regular_price" disabled={isWorking} {...register("regular_price" , { required : "This field is required"})}/>
       </FormRow>
      
       <FormRow label="discount" error={errors?.discount?.message}>
-        <Input type="number" id="discount" disabled={isCreating} defaultValue={0} {...register("discount" , { 
+        <Input type="number" id="discount" disabled={isWorking} defaultValue={0} {...register("discount" , { 
             required : "This field is required" ,
             validate : (value) => value <= getValues().regular_price || 'Discount should be less than regular price'
          })}/>
       </FormRow>
 
       <FormRow label="description" error={errors?.description?.message}>
-        <Textarea type="number" id="description" disabled={isCreating} defaultValue="" {...register("description" , { required : "This field is required"})}/>
+        <Textarea type="number" id="description" disabled={isWorking} defaultValue="" {...register("description" , { required : "This field is required"})}/>
       </FormRow>
 
       <FormRow label="image">
-        <FileInput id="image" accept="image/*" type="file" {...register("image" , { required : "This field is required"})}/>
+        <FileInput id="image" accept="image/*" type="file" {...register("image" , { required : isEditSession ? false : "This field is required"})}/>
       </FormRow>
 
       <FormRow>
@@ -82,7 +97,7 @@ function CreateCabinForm({cabinToEdit}) {
         <Button $variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button disabled={isCreating}>{isCreating? 'Crating...' : 'Add cabin'}</Button>
+        <Button disabled={isWorking}>{isEditSession ? "Edit cabin" : "Create new cabin"}</Button>
       </FormRow>
     </Form>
   );
