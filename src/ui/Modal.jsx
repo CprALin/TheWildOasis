@@ -84,7 +84,7 @@ function Window({children , name}) {
           </div>
         </StyledModal>
       </Overlay>,
-      document.body //this is not ideal
+      document.body //use a dedicated modal root
     )
 }
 
@@ -98,4 +98,9 @@ Window.propTypes = {
 
 Modal.propTypes = {
    children : PropTypes.node.isRequired
+}
+
+Open.propTypes = {
+    children : PropTypes.element.isRequired,
+    opens : PropTypes.string.isRequired
 }

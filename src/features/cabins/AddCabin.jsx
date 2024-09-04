@@ -10,12 +10,12 @@ export default function AddCabin() {
                 <Button>Add new cabin</Button>
             </Modal.Open>
             <Modal.Window name='cabin-form'>
-                <CreateCabinForm />
+                <CreateCabinForm /> 
             </Modal.Window>
 
             <Modal.Open opens='table'>
                 <Button>Show table</Button>
-            </Modal.Open>
+            </Modal.Open>     
             <Modal.Window name='table'>
                 <CabinTable />
             </Modal.Window>

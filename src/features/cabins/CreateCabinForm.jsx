@@ -28,8 +28,8 @@ function CreateCabinForm({cabinToEdit = {} , onCloseModal}) {
   function onSubmit(data) {
       const image = typeof data.image === 'string' ? data.image : data.image[0] 
     
-      if(isEditSession) editCabin({newCabinData : {...data , image} , id : editId} , { onSuccess : (data) => {reset(); onCloseModal?.(); }});
-      else createCabin({...data , image : image}, { onSuccess : (data) => {reset(); onCloseModal?.(); }});
+      if(isEditSession) editCabin({newCabinData : {...data , image} , id : editId} , { onSuccess : () => {reset(); onCloseModal?.(); }});
+      else createCabin({...data , image : image}, { onSuccess : () => {reset(); onCloseModal?.(); }});
   }
 
   function onError() {
