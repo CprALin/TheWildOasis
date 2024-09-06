@@ -12,7 +12,7 @@ import { useCreateCabin } from "./useCreateCabin";
 import { useEditCabin } from "./useEditCabin";
 
 
-function CreateCabinForm({cabinToEdit = {} , onCloseModal}) {
+function CreateCabinForm({cabinToEdit = {} , onCloseModal = () => {} }) {
   const { isEditing , editCabin } = useEditCabin();
   const { isCreating , createCabin } = useCreateCabin();
   const { id : editId , ...editValues } = cabinToEdit;
@@ -95,5 +95,5 @@ CreateCabinForm.propTypes = {
     description: PropTypes.string,
     image: PropTypes.string,  // Assuming the image is a URL or a file name
   }),
-  onCloseModal : PropTypes.func.isRequired
+  onCloseModal : PropTypes.func
 };
