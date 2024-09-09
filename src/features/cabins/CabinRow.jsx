@@ -8,7 +8,7 @@ import { useCreateCabin } from "./useCreateCabin";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 
-const TableRow = styled.div`
+/* const TableRow = styled.div`
   display: grid;
   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
   column-gap: 2.4rem;
@@ -18,7 +18,7 @@ const TableRow = styled.div`
   &:not(:last-child) {
     border-bottom: 1px solid var(--color-grey-100);
   }
-`;
+`; */
 
 const Img = styled.img`
   display: block;
@@ -66,7 +66,7 @@ export default function CabinRow({cabin}) {
 
   return (
     <>
-      <TableRow>
+      <Table.Row>
           <Img src={image} />
           <Cabin>{name}</Cabin>
           <div>Fits up tp {max_capacity} guests</div>
@@ -82,15 +82,15 @@ export default function CabinRow({cabin}) {
                   <CreateCabinForm cabinToEdit={cabin}/>
               </Modal.Window>
               
-              <Modal.Open>
+              <Modal.Open opens="delete">
                 <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}><HiTrash /></button>
               </Modal.Open>
-              <Modal.Window>
+              <Modal.Window name="delete">
                   <ConfirmDelete resourceName="cabins" disabled={isDeleting} onConfirm={() => deleteCabin(cabinId)}/>
               </Modal.Window>
             </Modal>
           </div>
-      </TableRow>
+      </Table.Row>
     </>
   )
 }
