@@ -99,8 +99,14 @@ Row.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-function Body({ children }) {
-  return <StyledBody>{children}</StyledBody>;
+function Body({ data , render }) {
+  if(data.length) return <Empty>No data to show at the moment</Empty>
+
+  return (
+    <StyledBody>
+       {data.map(render)}
+    </StyledBody>
+  )
 }
 
 Body.propTypes = {
