@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
@@ -60,7 +60,7 @@ const Empty = styled.p`
 
 const TableContext = React.createContext();
 
-export function Table({ columns, children }) {
+function Table({ columns, children }) {
   return (
     <TableContext.Provider value={{ columns }}>
       <StyledTable>{children}</StyledTable>
@@ -99,21 +99,24 @@ Row.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-function Body({ data , render }) {
-  if(data.length) return <Empty>No data to show at the moment</Empty>
+function Body({ data, render }) {
+  if (data.length === 0) return <Empty>No data to show at the moment</Empty>;
 
   return (
     <StyledBody>
-       {data.map(render)}
+      {data.map(render)}
     </StyledBody>
-  )
+  );
 }
 
 Body.propTypes = {
-  children: PropTypes.node.isRequired,
+  data: PropTypes.array.isRequired,
+  render: PropTypes.func.isRequired,
 };
 
 Table.Header = Header;
 Table.Body = Body;
 Table.Row = Row;
 Table.Footer = Footer;
+
+export default Table;
