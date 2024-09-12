@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
+import PropTypes from 'prop-types';
 
 import Tag from "../../ui/Tag";
 import Table from "../../ui/Table";
@@ -38,14 +39,14 @@ function BookingRow({
   booking: {
     id: bookingId,
     created_at,
-    startDate,
-    endDate,
-    numNights,
-    numGuests,
-    totalPrice,
+    start_date,
+    end_date,
+    num_nights,
+    num_guests,
+    total_price,
     status,
-    guests: { fullName: guestName, email },
-    cabins: { name: cabinName },
+    guests: { full_name: guest_name, email },
+    cabins: { name: cabin_name },
   },
 }) {
   const statusToTagName = {
@@ -56,31 +57,52 @@ function BookingRow({
 
   return (
     <Table.Row>
-      <Cabin>{cabinName}</Cabin>
+      <Cabin>{cabin_name}</Cabin>
 
       <Stacked>
-        <span>{guestName}</span>
+        <span>{guest_name}</span>
         <span>{email}</span>
       </Stacked>
 
       <Stacked>
         <span>
-          {isToday(new Date(startDate))
+          {isToday(new Date(start_date))
             ? "Today"
-            : formatDistanceFromNow(startDate)}{" "}
-          &rarr; {numNights} night stay
+            : formatDistanceFromNow(start_date)}{" "}
+          &rarr; {num_nights} night stay
         </span>
         <span>
-          {format(new Date(startDate), "MMM dd yyyy")} &mdash;{" "}
-          {format(new Date(endDate), "MMM dd yyyy")}
+          {format(new Date(start_date), "MMM dd yyyy")} &mdash;{" "}
+          {format(new Date(end_date), "MMM dd yyyy")}
         </span>
       </Stacked>
 
       <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
 
-      <Amount>{formatCurrency(totalPrice)}</Amount>
+      <Amount>{formatCurrency(total_price)}</Amount>
     </Table.Row>
   );
 }
+
+BookingRow.propTypes = {
+  booking: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    created_at: PropTypes.string.isRequired,
+    start_date: PropTypes.string.isRequired,
+    end_date: PropTypes.string.isRequired,
+    num_nights: PropTypes.number.isRequired,
+    num_guests: PropTypes.number.isRequired,
+    total_price: PropTypes.number.isRequired,
+    status: PropTypes.oneOf(['unconfirmed', 'checked-in', 'checked-out']).isRequired,
+    guests: PropTypes.shape({
+      full_name: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+    }).isRequired,
+    cabins: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
+
 
 export default BookingRow;
