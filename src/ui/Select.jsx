@@ -15,9 +15,9 @@ const StyledSelect = styled.select`
   box-shadow: var(--shadow-sm);
 `;
 
-export default function Select({options , value}) {
+export default function Select({options , value , onChange , ...props}) {
     return(
-       <StyledSelect value={value}>
+       <StyledSelect value={value} onChange={onChange} {...props}>
             {options.map((option) => 
                 <option value={option.value} key={option.value}>
                     {option.label}
@@ -34,5 +34,6 @@ Select.propTypes = {
       label: PropTypes.string.isRequired,
     })
   ).isRequired,
-  value: PropTypes.string
+  value: PropTypes.string,
+  onChange : PropTypes.func
 };
