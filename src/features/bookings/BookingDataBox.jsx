@@ -79,9 +79,9 @@ const Price = styled.div`
   margin-top: 2.4rem;
 
   background-color: ${(props) =>
-    props.isPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
+    props.$is_paid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
   color: ${(props) =>
-    props.isPaid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
+    props.$is_paid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
 
   & p:last-child {
     text-transform: uppercase;
@@ -116,8 +116,8 @@ function BookingDataBox({ booking }) {
     total_price,
     has_breakfast,
     observations,
-    is_paid,
-    guests: { fullName: guest_name, email, country, country_flag, national_id },
+    $is_paid,
+    guests: { full_name: guest_name, email, country, country_flag, national_id },
     cabins: { name: cabin_name },
   } = booking;
 
@@ -165,17 +165,17 @@ function BookingDataBox({ booking }) {
           {has_breakfast ? "Yes" : "No"}
         </DataItem>
 
-        <Price isPaid={is_paid}>
+        <Price $is_paid={$is_paid}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
             {formatCurrency(total_price)}
 
-            {hasBreakfast &&
+            {has_breakfast &&
               ` (${formatCurrency(cabin_price)} cabin + ${formatCurrency(
-                extrasPrice
+                extras_price
               )} breakfast)`}
           </DataItem>
 
-          <p>{is_paid ? "Paid" : "Will pay at property"}</p>
+          <p>{$is_paid ? "Paid" : "Will pay at property"}</p>
         </Price>
       </Section>
 
@@ -198,9 +198,9 @@ BookingDataBox.propTypes = {
     total_price: PropTypes.number.isRequired,
     has_breakfast: PropTypes.bool.isRequired,
     observations: PropTypes.string,
-    is_paid: PropTypes.bool.isRequired,
+    $is_paid: PropTypes.bool,
     guests: PropTypes.shape({
-      fullName: PropTypes.string.isRequired,
+      full_name: PropTypes.string.isRequired,
       email: PropTypes.string.isRequired,
       country: PropTypes.string,
       country_flag: PropTypes.string,
