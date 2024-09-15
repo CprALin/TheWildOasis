@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
+import PropTypes from "prop-types";
+
 import {
   HiOutlineChatBubbleBottomCenterText,
   HiOutlineCheckCircle,
@@ -105,18 +107,18 @@ const Footer = styled.footer`
 function BookingDataBox({ booking }) {
   const {
     created_at,
-    startDate,
-    endDate,
-    numNights,
-    numGuests,
-    cabinPrice,
-    extrasPrice,
-    totalPrice,
-    hasBreakfast,
+    start_date,
+    end_date,
+    num_nights,
+    num_guests,
+    cabin_price,
+    extras_price,
+    total_price,
+    has_breakfast,
     observations,
-    isPaid,
-    guests: { fullName: guestName, email, country, countryFlag, nationalID },
-    cabins: { name: cabinName },
+    is_paid,
+    guests: { fullName: guest_name, email, country, country_flag, national_id },
+    cabins: { name: cabin_name },
   } = booking;
 
   return (
@@ -125,29 +127,29 @@ function BookingDataBox({ booking }) {
         <div>
           <HiOutlineHomeModern />
           <p>
-            {numNights} nights in Cabin <span>{cabinName}</span>
+            {num_nights} nights in Cabin <span>{cabin_name}</span>
           </p>
         </div>
 
         <p>
-          {format(new Date(startDate), "EEE, MMM dd yyyy")} (
-          {isToday(new Date(startDate))
+          {format(new Date(start_date), "EEE, MMM dd yyyy")} (
+          {isToday(new Date(start_date))
             ? "Today"
-            : formatDistanceFromNow(startDate)}
-          ) &mdash; {format(new Date(endDate), "EEE, MMM dd yyyy")}
+            : formatDistanceFromNow(start_date)}
+          ) &mdash; {format(new Date(end_date), "EEE, MMM dd yyyy")}
         </p>
       </Header>
 
       <Section>
         <Guest>
-          {countryFlag && <Flag src={countryFlag} alt={`Flag of ${country}`} />}
+          {country_flag && <Flag src={country_flag} alt={`Flag of ${country}`} />}
           <p>
-            {guestName} {numGuests > 1 ? `+ ${numGuests - 1} guests` : ""}
+            {guest_name} {num_guests > 1 ? `+ ${num_guests - 1} guests` : ""}
           </p>
           <span>&bull;</span>
           <p>{email}</p>
           <span>&bull;</span>
-          <p>National ID {nationalID}</p>
+          <p>National ID {national_id}</p>
         </Guest>
 
         {observations && (
@@ -160,20 +162,20 @@ function BookingDataBox({ booking }) {
         )}
 
         <DataItem icon={<HiOutlineCheckCircle />} label="Breakfast included?">
-          {hasBreakfast ? "Yes" : "No"}
+          {has_breakfast ? "Yes" : "No"}
         </DataItem>
 
-        <Price isPaid={isPaid}>
+        <Price isPaid={is_paid}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
-            {formatCurrency(totalPrice)}
+            {formatCurrency(total_price)}
 
             {hasBreakfast &&
-              ` (${formatCurrency(cabinPrice)} cabin + ${formatCurrency(
+              ` (${formatCurrency(cabin_price)} cabin + ${formatCurrency(
                 extrasPrice
               )} breakfast)`}
           </DataItem>
 
-          <p>{isPaid ? "Paid" : "Will pay at property"}</p>
+          <p>{is_paid ? "Paid" : "Will pay at property"}</p>
         </Price>
       </Section>
 
@@ -183,5 +185,31 @@ function BookingDataBox({ booking }) {
     </StyledBookingDataBox>
   );
 }
+
+BookingDataBox.propTypes = {
+  booking: PropTypes.shape({
+    created_at: PropTypes.string.isRequired,
+    start_date: PropTypes.string.isRequired,
+    end_date: PropTypes.string.isRequired,
+    num_nights: PropTypes.number.isRequired,
+    num_guests: PropTypes.number.isRequired,
+    cabin_price: PropTypes.number.isRequired,
+    extras_price: PropTypes.number.isRequired,
+    total_price: PropTypes.number.isRequired,
+    has_breakfast: PropTypes.bool.isRequired,
+    observations: PropTypes.string,
+    is_paid: PropTypes.bool.isRequired,
+    guests: PropTypes.shape({
+      fullName: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      country: PropTypes.string,
+      country_flag: PropTypes.string,
+      national_id: PropTypes.string,
+    }).isRequired,
+    cabins: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+};
 
 export default BookingDataBox;
