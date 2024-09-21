@@ -116,10 +116,12 @@ function BookingDataBox({ booking }) {
     total_price,
     has_breakfast,
     observations,
-    $is_paid,
+    is_paid,
     guests: { full_name: guest_name, email, country, country_flag, national_id },
     cabins: { name: cabin_name },
   } = booking;
+
+  console.log(booking);
 
   return (
     <StyledBookingDataBox>
@@ -165,7 +167,7 @@ function BookingDataBox({ booking }) {
           {has_breakfast ? "Yes" : "No"}
         </DataItem>
 
-        <Price $is_paid={$is_paid}>
+        <Price $is_paid={is_paid}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
             {formatCurrency(total_price)}
 
@@ -175,7 +177,7 @@ function BookingDataBox({ booking }) {
               )} breakfast)`}
           </DataItem>
 
-          <p>{$is_paid ? "Paid" : "Will pay at property"}</p>
+          <p>{is_paid ? "Paid" : "Will pay at property"}</p>
         </Price>
       </Section>
 
@@ -198,7 +200,7 @@ BookingDataBox.propTypes = {
     total_price: PropTypes.number.isRequired,
     has_breakfast: PropTypes.bool.isRequired,
     observations: PropTypes.string,
-    $is_paid: PropTypes.bool,
+    is_paid: PropTypes.bool,
     guests: PropTypes.shape({
       full_name: PropTypes.string.isRequired,
       email: PropTypes.string.isRequired,
