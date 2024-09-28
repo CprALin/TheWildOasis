@@ -12,6 +12,7 @@ export default function Stats({bookings , confirmedStays , numDays , cabinCount}
 
     const occupation = confirmedStays.reduce((acc,cur) => acc + cur.num_nights , 0) / (numDays * cabinCount);
 
+
     return(
         <>
           <Stat title='Bookings' color='blue' icon={<HiOutlineBriefcase />} value={numBookings}/>
