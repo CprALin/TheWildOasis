@@ -37,7 +37,7 @@ const Box = styled.div`
 export default function ErrorFallback({error , resetErrorBoundary}) {
   return (
     <>
-      <GlobalStyles>
+      <GlobalStyles />
         <StyledErrorFallback>
           <Box>
               <Heading as="h1">Something went wrong 🤔</Heading>
@@ -45,12 +45,11 @@ export default function ErrorFallback({error , resetErrorBoundary}) {
               <Button size='large' onClick={resetErrorBoundary}>Try again</Button>
           </Box>
         </StyledErrorFallback>
-      </GlobalStyles>
     </>
   )
 }
 
 ErrorFallback.propTypes = {
-     error : PropTypes.string,
+     error : PropTypes.object,
      resetErrorBoundary : PropTypes.func
 }
